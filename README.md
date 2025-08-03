@@ -7,7 +7,7 @@ A premium Windows application pinninf tool that allows you to "pin" specific app
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue?style=for-the-badge)
 
-##Interface
+## Interface
 <img width="1224" height="821" alt="image" src="https://github.com/user-attachments/assets/4220cf86-2267-43e5-8e17-d53b987691e3" />
 
 
