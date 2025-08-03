@@ -7,10 +7,14 @@ A premium Windows application pinninf tool that allows you to "pin" specific app
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue?style=for-the-badge)
 
+## Interface
+<img width="1224" height="821" alt="image" src="https://github.com/user-attachments/assets/4220cf86-2267-43e5-8e17-d53b987691e3" />
+
+
 ## Installation & Setup
 
 ### Installation
-1. Download PinLock.exe from the latest release
+1. Download PinLock.exe from the latest [Release](https://github.com/editinghero/PinLock/releases)
 2. Handle Windows SmartScreen warning if prompted
 3. Launch the application
 4. Optionally add to Windows Defender exclusions
