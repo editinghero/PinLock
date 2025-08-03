@@ -1,0 +1,373 @@
+<Window x:Class="PinLock.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PinLock - Premium App Security" 
+        Height="700" Width="1100"
+        MinHeight="600" MinWidth="900"
+        WindowStartupLocation="CenterScreen"
+        Background="#463a41"
+        ResizeMode="CanResize"
+        AllowsTransparency="False"
+        WindowStyle="None"
+        BorderBrush="Transparent"
+        BorderThickness="0"
+        Icon="logo.png">
+    
+    <Window.Resources>
+        <!-- Custom Theme Colors -->
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#463a41" Opacity="0.9"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#feb47b"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#ffff"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#f2e9e4"/>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#ff7e5f"/>
+        <SolidColorBrush x:Key="SecondaryBrush" Color="#463a41"/>
+        
+        <!-- Modern Card Style -->
+        <Style x:Key="ModernCard" TargetType="Border">
+            <Setter Property="Background" Value="#463a41"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Direction="270" ShadowDepth="4" Opacity="0.3" BlurRadius="10"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Modern Button Style -->
+        <Style x:Key="AccentButton" TargetType="Button">
+            <Setter Property="Background" Value="#feb47b"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#ff7e5f"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#E56B4F"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Custom ListView Style -->
+        <Style x:Key="CustomListView" TargetType="ListView">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListView">
+                        <ScrollViewer>
+                            <ItemsPresenter/>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Custom ListViewItem Style -->
+        <Style x:Key="CustomListViewItem" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#feb47b"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#ff7e5f"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="#ff7e5f"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+        
+        <!-- Custom Title Bar with Mac-style controls -->
+        <Border Grid.Row="0" Background="#463a41" Height="40" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Mac-style Window Controls (Left side) -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="12,0,0,0" VerticalAlignment="Center">
+                    <!-- Close Button (Red) -->
+                    <Button x:Name="CloseButton" 
+                            Width="12" Height="12" 
+                            Margin="0,0,8,0"
+                            Background="#FF5F57"
+                            BorderBrush="#E0443E"
+                            BorderThickness="0.5"
+                            Click="CloseButton_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#E74C3C"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    
+                    <!-- Minimize Button (Yellow) -->
+                    <Button x:Name="MinimizeButton" 
+                            Width="12" Height="12" 
+                            Margin="0,0,8,0"
+                            Background="#FFBD2E"
+                            BorderBrush="#DEA123"
+                            BorderThickness="0.5"
+                            Click="MinimizeButton_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#F39C12"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    
+                    <!-- Maximize Button (Green) -->
+                    <Button x:Name="MaximizeButton" 
+                            Width="12" Height="12" 
+                            Background="#28CA42"
+                            BorderBrush="#1AAB29"
+                            BorderThickness="0.5"
+                            Click="MaximizeButton_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#27AE60"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+                
+                <!-- App Title (Center) -->
+                <TextBlock Grid.Column="1" 
+                           Text="PinLock - Premium App Security" 
+                           FontSize="13" 
+                           FontWeight="Medium"
+                           Foreground="White" 
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                
+                <!-- App Icon (Right side) -->
+                <Image Grid.Column="2" 
+                       Source="logo.png" 
+                       Width="24" Height="24" 
+                       Margin="0,0,15,0"
+                       VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+        
+        <!-- Header -->
+        <Border Grid.Row="1" Style="{StaticResource ModernCard}" Margin="20,20,20,0">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <Image Source="logo.png" Width="64" Height="64" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                    <StackPanel>
+                        <TextBlock Text="PinLock" 
+                                   FontSize="28" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"/>
+                        <TextBlock Text="Premium Application Security &amp; Monitoring" 
+                                   FontSize="14" 
+                                   Foreground="#f2e9e4"/>
+                    </StackPanel>
+                </StackPanel>
+                
+                <TextBlock x:Name="StatusText" 
+                           Text="Ready - Select an application and click Pin to secure it"
+                           FontSize="13"
+                           Foreground="#feb47b"
+                           FontWeight="Medium"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Main Content -->
+        <Border Grid.Row="2" Style="{StaticResource ModernCard}" Margin="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Grid.Row="0" 
+                           Text="Running Applications" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           Foreground="White"
+                           Margin="0,0,0,15"/>
+                
+                <ListView x:Name="AppListView" 
+                          Grid.Row="1"
+                          Style="{StaticResource CustomListView}"
+                          SelectionChanged="AppListView_SelectionChanged"
+                          ItemContainerStyle="{StaticResource CustomListViewItem}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#463a41" 
+                                    CornerRadius="6" 
+                                    Padding="15" 
+                                    Margin="0,3">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Image Grid.Column="0" 
+                                           Source="{Binding Icon}" 
+                                           Width="32" Height="32" 
+                                           Margin="0,0,15,0"/>
+                                    
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding ProcessName}" 
+                                                   FontWeight="SemiBold" 
+                                                   FontSize="14"
+                                                   Foreground="White"/>
+                                        <TextBlock Text="{Binding WindowTitle}" 
+                                                   FontSize="12" 
+                                                   Foreground="#f2e9e4"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    
+                                    <TextBlock Grid.Column="2" 
+                                               Text="📌" 
+                                               FontSize="16"
+                                               Foreground="#feb47b"
+                                               VerticalAlignment="Center"
+                                               Margin="10,0,0,0"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                
+                <Button Grid.Row="2" 
+                        x:Name="PinButton"
+                        Content="🔒 Pin Selected App" 
+                        Style="{StaticResource AccentButton}"
+                        Click="PinButton_Click"
+                        Margin="0,20,0,10"
+                        IsEnabled="False"/>
+                
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Button Grid.Column="0"
+                            x:Name="RefreshButton"
+                            Content="🔄 Refresh Apps" 
+                            Style="{StaticResource AccentButton}"
+                            Click="RefreshButton_Click"
+                            Margin="0,0,5,0"/>
+                    
+                    <Button Grid.Column="1"
+                            x:Name="AddCustomButton"
+                            Content="➕ Add Custom App" 
+                            Style="{StaticResource AccentButton}"
+                            Click="AddCustomButton_Click"
+                            Margin="5,0,0,0"/>
+                </Grid>
+            </Grid>
+        </Border>
+        
+        <!-- Footer -->
+        <Border Grid.Row="3" Style="{StaticResource ModernCard}" Margin="20,10,20,20">
+            <StackPanel>
+                <TextBlock Text="How it works:" 
+                           FontWeight="SemiBold" 
+                           FontSize="13"
+                           Foreground="White"
+                           Margin="0,0,0,8"/>
+                <TextBlock FontSize="12" Foreground="#f2e9e4" LineHeight="18">
+                    <Run Text="• Pin an app → It maximizes and stays on top"/>
+                    <LineBreak/>
+                    <Run Text="• Switch to any other app → Windows locks instantly"/>
+                    <LineBreak/>
+                    <Run Text="• Resize this window → Windows locks"/>
+                    <LineBreak/>
+                    <Run Text="• App minimizes to system tray when closed"/>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+        </Grid>
+</Window>
